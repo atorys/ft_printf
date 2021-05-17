@@ -4,7 +4,7 @@ HEADERS =
 FILES =
 O_FILES =	$(FILES:.c=.o)
 
-CFLAGS =	-Wall -Wextra -Werror
+CFLAGS =	-Wall -Wextra -Werror -g -O2
 
 all:		$(NAME)
 
