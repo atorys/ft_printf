@@ -60,7 +60,7 @@ static int	str_parsing(const char *format, va_list arguments, int *printed)
 int ft_printf(const char *format, ...)
 {
 	int		printed;
-	va_list	:arguments;
+	va_list	arguments;
 
 	printed = 0;
 	va_start(arguments, format);
