@@ -16,8 +16,10 @@ $(NAME):	$(O_FILES) $(HEADERS)
 
 clean:
 			@rm -f $(O_FILES)
+
 fclean:		clean
 			@rm -f $(NAME)
+
 re:			fclean all
 
 
