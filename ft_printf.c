@@ -34,10 +34,11 @@ t_fmt	ft_new_params(void)
 	return (params);
 }
 
-int	flags_mods_parsing(t_fmt params, const char **format, va_list arguments)
+int	flags_mods_parsing(t_fmt params, const char *format, va_list arguments)
 {
 	while (*format == '0' || *format == '*' || *format == '.' ||
-		*format == '-' || *format == '+' || (*format >= '0' && *format <= '9'))
+		*format == '-' || (*format >= '0' && *format <= '9'))
+
 }
 
 static void	str_parsing(const char *format, va_list arguments, int *printed)
@@ -58,7 +59,7 @@ static void	str_parsing(const char *format, va_list arguments, int *printed)
 				printed++;
 			}
 			params = ft_new_params();
-			status = flags_mods_parsing(params, &format, arguments);
+			status = flags_mods_parsing(params, format, arguments);
 		}
 		ft_putchar_fd(*format, 1);
 		printed++;
