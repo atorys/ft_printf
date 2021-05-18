@@ -34,27 +34,35 @@ t_fmt	ft_new_params(void)
 	return (params);
 }
 
-int	flags_mods_parsing(const char **format)
+int	flags_mods_parsing(t_fmt params, const char **format, va_list arguments)
 {
-	while (**format)
+	while (*format == '0' || *format == '*' || *format == '.' ||
+		*format == '-' || *format == '+' || (*format >= '0' && *format <= '9'))
 }
 
-static int	str_parsing(const char *format, va_list arguments, int *printed)
+static void	str_parsing(const char *format, va_list arguments, int *printed)
 {
-	int	status;
+	int		status;
+	t_fmt	params;
 
 	status = 0;
-	while (*format++ && !status)
+	while (*format && !status)
 	{
 		if (*format == '%')
 		{
 			*format++;
-			status = flags_mods_parsing(&format, );
+			if (*format == ' ')
+			{
+				ft_putchar_fd(*format, 1);
+				*format++;
+				printed++;
+			}
+			params = ft_new_params();
+			status = flags_mods_parsing(params, &format, arguments);
 		}
 		ft_putchar_fd(*format, 1);
 		printed++;
 	}
-	return (0);
 }
 
 int ft_printf(const char *format, ...)
