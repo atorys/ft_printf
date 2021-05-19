@@ -1,7 +1,8 @@
 NAME =		libftprintf.a
-HEADERS =
+HEADERS =   ft_printf.h
+            libft.h
 
-FILES =
+FILES =     ft_printf.c
 O_FILES =	$(FILES:.c=.o)
 
 CFLAGS =	-Wall -Wextra -Werror -g -O2

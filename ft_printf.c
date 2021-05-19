@@ -19,18 +19,16 @@ typedef struct s_flags_modifications_type
 	char type;
 }				t_fmt;
 
-t_fmt	ft_new_params(void)
+void	ft_new_params(t_fmt *params)
 {
-	t_fmt	params;
+	params->minus = 0;
+	params->zero = 0;
+	params->width = 0;
+	params->dot = 0;
+	params->star = 0;
+	params->precision = 0;
+	params->type = 0;
 
-	params.minus = 0;
-	params.zero = 0;
-	params.width = 0;
-	params.dot = 0;
-	params.star = 0;
-	params.precision = 0;
-	params.type = 0;
-	return (params);
 }
 
 int	is_type(char format)
@@ -49,28 +47,44 @@ int	is_type(char format)
  ******************************************************************************/
 
 
-int	flags_mods_parsing(t_fmt params, const char *format, va_list arguments)
+int	flags_mods_parsing(t_fmt *params, char **format, va_list arguments)
 {
-	int printed;
+	int		printed;
 
 	printed = 0;
-	while (*format == '0' || *format == '*' || *format == '.' ||
-		*format == '-' || ft_isdigit(*format))
+	while (**format != '\0' && (**format == '0' || **format == '*' || **format == '.' ||
+		**format == '-' || ft_isdigit(**format)))
 	{
-		if (*format == '-')
+		if (**format == '-')
 		{
-			params.minus = 1;
-			params.zero = 0;
+			params->minus = 1;
+			params->zero = 0;
 		}
-		else if (*format == '0' && !params.width && !params.minus)
-			params.zero = 1;
-		else if (*format == '*' && !params.width)
-			params.star = 1;
+		else if (**format == '0' && !params->width && !params->minus)
+			params->zero = 1;
+		else if (**format == '*' && !params->width)
+		{
+			params->star = 1;
+			params->width = va_arg(arguments, int);
+		}
+		else if (**format == '.' && !params->dot)
+		{
+			if (!(**format))
+				return (-1);
+			params->dot = 1;
+			while (ft_isdigit(**format))
+			{
+				params->precision = params->precision * 10 + (**format + 48);
+				*format++;
+			}
+			if (**format == '*')
+				params->precision = va_arg(arguments, int);
+		}
 		*format++;
 	}
-	if (is_type(*format))
-		params.type = *format;
-	else if (*format == '%')
+	if (is_type(**format))
+		params->type = **format;
+	else if (**format == '%')
 	{
 		ft_putchar_fd('%', 1);
 		printed++;
@@ -78,26 +92,36 @@ int	flags_mods_parsing(t_fmt params, const char *format, va_list arguments)
 	return (printed);
 }
 
-static void	str_parsing(const char *format, va_list arguments, int *printed)
+static void	str_parsing(char *format, va_list arguments, int *printed)
 {
 	t_fmt	params;
+	int 	check;
 
-	while (*format++)
+	format[ft_strlen(format)] = 0;
+	while (*format)
 	{
-		if (*format++ == '%')
+		if (*format == '%')
 		{
+			*format++;
 			if (*format == ' ')
 			{
-				ft_putchar_fd(*format++, 1);
+				ft_putchar_fd(*format, 1);
 				printed++;
 			}
-			params = ft_new_params();
-			printed += flags_mods_parsing(params, format, arguments);
+			ft_new_params(&params);
+			check = flags_mods_parsing(&params, &format, arguments);
+			if (check == -1)
+			{
+				*printed = check;
+				return ;
+			}
+			*printed = *printed + check;
 		}
 		else
 		{
 			ft_putchar_fd(*format, 1);
-			printed++;
+			*printed = *printed + 1;
+			*format++;
 		}
 	}
 }
@@ -108,11 +132,13 @@ static void	str_parsing(const char *format, va_list arguments, int *printed)
 int ft_printf(const char *format, ...)
 {
 	int		printed;
+	char 	*copy;
 	va_list	arguments;
 
 	printed = 0;
+//	copy = (char *)format;
 	va_start(arguments, format);
-	str_parsing(format, arguments, &printed);
+	str_parsing((char *)format, arguments, &printed);
 	va_end(arguments);
 	return (printed);
 }
