@@ -7,4 +7,5 @@ include_directories(./)
 
 add_executable(printf
         main.c
-        ft_printf.c ft_printf.h)
+        ft_printf.c
+        ft_printf.h)
