@@ -14,23 +14,19 @@ typedef struct s_flags_modifications_type
 	int	zero;
 	int	width;
 	int	dot;
-	int star;
 	int	precision;
 	char type;
 }				t_fmt;
 
-t_fmt	ft_new_params(void)
+void	new_params(t_fmt *params)
 {
-	t_fmt	params;
+	params->minus = 0;
+	params->zero = 0;
+	params->width = 0;
+	params->dot = 0;
+	params->precision = 0;
+	params->type = 0;
 
-	params.minus = 0;
-	params.zero = 0;
-	params.width = 0;
-	params.dot = 0;
-	params.star = 0;
-	params.precision = 0;
-	params.type = 0;
-	return (params);
 }
 
 int	is_type(char format)
@@ -48,57 +44,75 @@ int	is_type(char format)
  * @return
  ******************************************************************************/
 
-
-int	flags_mods_parsing(t_fmt params, const char *format, va_list arguments)
+static void	find_flags(t_fmt *params, char **format)
 {
-	int printed;
-
-	printed = 0;
-	while (*format == '0' || *format == '*' || *format == '.' ||
-		*format == '-' || ft_isdigit(*format))
+	while (**format && (**format == '0' || **format == '-'))
 	{
-		if (*format == '-')
+		if (**format == '-')
 		{
-			params.minus = 1;
-			params.zero = 0;
+			params->minus = 1;
+			params->zero = 0;
 		}
-		else if (*format == '0' && !params.width && !params.minus)
-			params.zero = 1;
-		else if (*format == '*' && !params.width)
-			params.star = 1;
+		if (**format == '0' && !params->width && !params->minus)
+			params->zero = 1;
 		*format++;
 	}
-	if (is_type(*format))
-		params.type = *format;
-	else if (*format == '%')
-	{
-		ft_putchar_fd('%', 1);
-		printed++;
-	}
-	return (printed);
 }
 
-static void	str_parsing(const char *format, va_list arguments, int *printed)
+static void	find_mods(t_fmt *params, char **format, va_list arguments)
+{
+	while (**format && (**format == '*' || **format == '.' ||
+			ft_isdigit(**format)))
+	{
+		if (**format == '*' && !params->width)
+			params->width = va_arg(arguments, int);
+		if (ft_isdigit(**format) && !params->width)
+		{
+			while (ft_isdigit(**format))
+			{
+				params->width = params->width * 10 + (**format - 48);
+				*format++;
+			}
+		}
+		if (**format == '.' && !params->dot)
+		{
+			*format++;
+			params->dot = 1;
+			while (ft_isdigit(**format))
+			{
+				params->precision = params->precision * 10 + (**format - 48);
+				*format++;
+			}
+			if (**format == '*')
+				params->precision = va_arg(arguments, int);
+		}
+	}
+}
+
+static void print(va_list arguments, t_fmt *params, int *printed)
+{
+
+}
+
+static void	str_parsing(char *format, va_list arguments, int *printed)
 {
 	t_fmt	params;
 
-	while (*format++)
+	while (*format) /** todo: add index */
 	{
-		if (*format++ == '%')
+		if (*format == '%' && ++(*format)!= '%')
 		{
-			if (*format == ' ')
-			{
-				ft_putchar_fd(*format++, 1);
-				printed++;
-			}
-			params = ft_new_params();
-			printed += flags_mods_parsing(params, format, arguments);
+			new_params(&params);
+			find_flags(&params, &format);
+			find_mods(&params, &format, arguments);
+			if (is_type(*format))
+				params.type = *format++;
+			print(arguments, &params, printed);
+			continue ;
 		}
-		else
-		{
-			ft_putchar_fd(*format, 1);
-			printed++;
-		}
+		ft_putchar_fd(*format, 1);
+		*printed = *printed + 1;
+		format++;
 	}
 }
 
@@ -112,7 +126,7 @@ int ft_printf(const char *format, ...)
 
 	printed = 0;
 	va_start(arguments, format);
-	str_parsing(format, arguments, &printed);
+	str_parsing((char *)format, arguments, &printed);
 	va_end(arguments);
 	return (printed);
 }
