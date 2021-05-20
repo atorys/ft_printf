@@ -5,12 +5,20 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-/*
- * multiple ags in function . . .
- */
 # include <stdarg.h>
 
-int	ft_printf(const char *format, ...);
+typedef struct s_flags_modifications_type
+{
+	int	minus;
+	int	zero;
+	int	width;
+	int	dot;
+	int	precision;
+	char type;
+}				t_fmt;
 
 
+int		ft_printf(const char *format, ...);
+void	p_char(va_list arguments, t_fmt *params, int *printed);
+void	p_str(va_list arguments, t_fmt *params, int *printed);
 #endif

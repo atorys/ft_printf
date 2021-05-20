@@ -4,7 +4,7 @@
 int main() {
 	int result = 0;
 
-    result = ft_printf("%-10d");
-    printf("\n%10s", "abc");
+    result = ft_printf("%0-0-00-4c\n", 'A');
+    printf("%-04.1c", 'A');
     return 0;
 }
