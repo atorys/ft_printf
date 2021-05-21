@@ -12,7 +12,6 @@ typedef struct s_flags_modifications_type
 	int	minus;
 	int	zero;
 	int	width;
-	int	dot;
 	int	precision;
 	char type;
 }				t_fmt;
@@ -20,5 +19,5 @@ typedef struct s_flags_modifications_type
 
 int		ft_printf(const char *format, ...);
 void	p_char(va_list arguments, t_fmt *params, int *printed);
-void	p_str(va_list arguments, t_fmt *params, int *printed);
+void	p_int(va_list arguments, t_fmt *params, int *printed);
 #endif

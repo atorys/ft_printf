@@ -11,4 +11,5 @@ add_executable(printf
         libft/ft_isdigit.c
         libft/ft_putchar_fd.c
         ft_printf.h
-        libft/ft_strlen.c p_char.c)
+        libft/ft_strlen.c
+        p_char.c p_int.c)

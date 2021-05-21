@@ -14,8 +14,7 @@ void	new_params(t_fmt *params)
 	params->minus = 0;
 	params->zero = 0;
 	params->width = 0;
-	params->dot = 0;
-	params->precision = -1;
+	params->precision = -10;
 	params->type = 0;
 }
 
@@ -31,6 +30,9 @@ int	is_type(char format)
  * FORMAT STRING PARSING // @param params // @param format //@param arguments  *
 \******************************************************************************/
 
+/***************\
+ *   FINDERS   *
+\***************/
 static int	find_flags(t_fmt *params, char *format)
 {
 	int i;
@@ -55,16 +57,15 @@ static int	find_mods(t_fmt *params, char *format, va_list arguments)
 	int i;
 
 	i = 0;
-	while (ft_isdigit(format[i]) && !params->width)
-		params->width = params->width * 10 + (format[i++] - 48);
+	while (ft_isdigit(format[i]))
+			params->width = params->width * 10 + (format[i++] - 48);
 	if (format[i] == '*' && !params->width)
 	{
 		params->width = va_arg(arguments, int);
 		i++;
 	}
-	if (format[i] == '.' && !params->dot)
+	if (format[i] == '.')
 	{
-		params->dot = 1;
 		params->precision = 0;
 		while (ft_isdigit(format[++i]))
 			params->precision = params->precision * 10 + (format[i] - 48);
@@ -76,6 +77,10 @@ static int	find_mods(t_fmt *params, char *format, va_list arguments)
 	}
 	return (i);
 }
+
+/***************\
+ * PRINT TYPE  *
+\***************/
 
 static void print(va_list arguments, t_fmt *params, int *printed)
 {
@@ -110,17 +115,14 @@ static void	str_parsing(char *format, va_list arguments, int *printed)
 		{
 			*format++;
 			new_params(&params);
-			while (!is_type(*format) && *format)
+			format += find_flags(&params, format);
+			format += find_mods(&params, format, arguments);
+			if (!is_type(*format))
 			{
-				format += find_flags(&params, format);
-				format += find_mods(&params, format, arguments);
+				*printed = -1;
+				return ;
 			}
 			params.type = *format++;
-//			if (!params.type)
-//			{
-//				*printed = -1;
-//				return ;
-//			}
 			print(arguments, &params, printed);
 			continue ;
 		}

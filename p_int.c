@@ -1,13 +1,32 @@
 #include "ft_printf.h"
 #include "libft/libft.h"
 
-void p_char(va_list arguments, t_fmt *params, int *printed)
+void p_int(va_list arguments, t_fmt *params, int *printed)
 {
-	char	c;
+	int	c;
 
 	c = va_arg(arguments, int);
-	if (!c)
-		return ;
+	if (params->minus)
+	{
+
+	}
+	else if (params->zero)
+	{
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 	if (!params->width)
 	{
 		ft_putchar_fd(c, 1);
@@ -38,5 +57,5 @@ void p_char(va_list arguments, t_fmt *params, int *printed)
 				ft_putchar_fd(' ', 1);
 			ft_putchar_fd(c, 1);
 		}
-		}
+	}
 }
