@@ -33,10 +33,11 @@ void p_char(va_list arguments, t_fmt *params, int *printed)
 				ft_putchar_fd('0', 1);
 			ft_putchar_fd(c, 1);
 		}
-		else{
+		else
+		{
 			while ( params->width-- > 1)
 				ft_putchar_fd(' ', 1);
 			ft_putchar_fd(c, 1);
 		}
-		}
+	}
 }

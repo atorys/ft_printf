@@ -67,7 +67,7 @@ static int	find_mods(t_fmt *params, char *format, va_list arguments)
 	if (format[i] == '.')
 	{
 		params->precision = 0;
-		while (ft_isdigit(format[++i]))
+		while (ft_isdigit(format[++i])) /** todo: проверка не пролетает ли значение с .* */
 			params->precision = params->precision * 10 + (format[i] - 48);
 		if (format[i] == '*' && !params->precision)
 		{
