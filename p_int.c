@@ -4,16 +4,13 @@
 void	print_nbr(int n, int fd)
 {
 	if (n == -2147483648)
-		ft_putstr_fd("-2147483648", fd);
+		ft_putstr_fd("2147483648", fd);
 	else if (n == 2147483647)
 		ft_putstr_fd("2147483647", fd);
 	else
 	{
 		if (n < 0)
-		{
-			ft_putchar_fd('-', fd);
 			n = -1 * n;
-		}
 		if (n >= 0 && n < 10)
 			ft_putchar_fd(n + '0', fd);
 		else
@@ -29,7 +26,11 @@ int len(int c)
 	int len;
 
 	len = 0;
-	while (c > 0)
+	if (c < 0 && c > -2147483648)
+		c *= -1;
+	if (c == -2147483648 || c == 2147483647)
+		len = 10;
+	while (c > 0 && c != 2147483647)
 	{
 		c /= 10;
 		len++;
@@ -39,13 +40,15 @@ int len(int c)
 void p_int(va_list arguments, t_fmt *params, int *printed)
 {
 	int c;
+	int minus;
 
 	c = va_arg(arguments, int);
+	minus = 0;
 	if (c == 0 && params->precision == 0)
 		return ;
 	if (params->precision >= 0)
 		params->zero = 0;
-	if (len(c) < params->precision)
+	if (len(c) > params->precision)
 		params->precision = len(c);
 	if (params->width < 0)
 	{
@@ -53,67 +56,61 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 		params->zero = 0;
 		params->width = -1 * params->width;
 	}
+	if (params->precision < 0)
+		params->precision = 0;
 
 	if (params->minus)
 	{
 		if (c < 0)
-			ft_putchar_fd('-', 1);
-		while (params->width--)
 		{
+			ft_putchar_fd('-', 1);
+			minus = 1;
+		}
+		while (params->precision - len(c) > 0)
+		{
+			ft_putchar_fd('0', 1);
+			params->precision--;
+			params->width--;
+		}
+		print_nbr(c, 1);
+		while (params->width - params->precision - minus > 0)
+		{
+			ft_putchar_fd(' ', 1);
+			params->width--;
+		}
+	}
+	else
+	{
+		if (c < 0)
+			minus = 1;
+		if (params->zero)
+		{
+			if (minus)
+				ft_putchar_fd('-', 1);
+			while (params->width - len(c) - minus > 0)
+			{
+				ft_putchar_fd('0', 1);
+				params->width--;
+			}
+			print_nbr(c, 1);
+		}
+		else
+		{
+			if (params->width < params->precision)
+				params->width = params->precision;
+			while (params->width - params->precision - minus > 0)
+			{
+				ft_putchar_fd(' ', 1);
+				params->width--;
+			}
+			if (minus)
+				ft_putchar_fd('-', 1);
 			while (params->precision - len(c) > 0)
 			{
 				ft_putchar_fd('0', 1);
 				params->precision--;
-				params->width--;
 			}
-			ft_putchar_fd(' ', 1);
-		}
-	}
-	else if (params->zero)
-	{
-	}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-	if (!params->width)
-	{
-		ft_putchar_fd(c, 1);
-		printed++;
-	}
-	else if (params->width < 0)
-	{
-		params->minus = 1;
-		params->zero = 0;
-		params->width = -1 * params->width;
-	}
-	if (params->minus)
-	{
-		ft_putchar_fd(c, 1);
-		while (--params->width > 0)
-			ft_putchar_fd(' ', 1);
-	}
-	else
-	{
-		if (params->zero)
-		{
-			while (params->width-- > 1)
-				ft_putchar_fd('0', 1);
-			ft_putchar_fd(c, 1);
-		}
-		else{
-			while ( params->width-- > 1)
-				ft_putchar_fd(' ', 1);
-			ft_putchar_fd(c, 1);
+			print_nbr(c, 1);
 		}
 	}
 }

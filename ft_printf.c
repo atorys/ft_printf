@@ -91,8 +91,8 @@ static void print(va_list arguments, t_fmt *params, int *printed)
 		p_char(arguments, params, printed);
 //	else if (t == 's')
 //		;
-//	else if (t == 'd' || t == 'i')
-//		;
+	else if (t == 'd' || t == 'i')
+		p_int(arguments, params, printed);
 //	else if (t == 'p')
 //		;
 //	else if (t == 'u')
