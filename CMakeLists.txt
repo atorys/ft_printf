@@ -8,10 +8,8 @@ include_directories(./)
 add_executable(printf
         main.c
         ft_printf.c
-        libft/ft_isdigit.c
-        libft/ft_putchar_fd.c
-        libft/ft_putstr_fd.c
-        libft/ft_putnbr_fd.c
         ft_printf.h
-        libft/ft_strlen.c
-        p_char.c p_int.c)
+        p_char.c
+        p_int.c
+        parsing_utils.c
+        printing_utils.c)

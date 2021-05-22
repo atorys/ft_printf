@@ -1,42 +1,5 @@
 #include "ft_printf.h"
-#include "libft/libft.h"
 
-void	print_nbr(int n, int fd)
-{
-	if (n == -2147483648)
-		ft_putstr_fd("2147483648", fd);
-	else if (n == 2147483647)
-		ft_putstr_fd("2147483647", fd);
-	else
-	{
-		if (n < 0)
-			n = -1 * n;
-		if (n >= 0 && n < 10)
-			ft_putchar_fd(n + '0', fd);
-		else
-		{
-			ft_putnbr_fd(n / 10, fd);
-			ft_putnbr_fd(n % 10, fd);
-		}
-	}
-}
-
-int len(int c)
-{
-	int len;
-
-	len = 0;
-	if (c < 0 && c > -2147483648)
-		c *= -1;
-	if (c == -2147483648 || c == 2147483647)
-		len = 10;
-	while (c > 0 && c != 2147483647)
-	{
-		c /= 10;
-		len++;
-	}
-	return (len);
-}
 void p_int(va_list arguments, t_fmt *params, int *printed)
 {
 	int c;
@@ -64,6 +27,7 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 		if (c < 0)
 		{
 			ft_putchar_fd('-', 1);
+			*printed += 1;
 			minus = 1;
 		}
 		while (params->precision - len(c) > 0)
@@ -71,12 +35,15 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 			ft_putchar_fd('0', 1);
 			params->precision--;
 			params->width--;
+			*printed += 1;
 		}
 		print_nbr(c, 1);
+		*printed += len(c);
 		while (params->width - params->precision - minus > 0)
 		{
 			ft_putchar_fd(' ', 1);
 			params->width--;
+			*printed += 1;
 		}
 	}
 	else
@@ -87,12 +54,15 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 		{
 			if (minus)
 				ft_putchar_fd('-', 1);
+			*printed += minus;
 			while (params->width - len(c) - minus > 0)
 			{
 				ft_putchar_fd('0', 1);
 				params->width--;
+				*printed += 1;
 			}
 			print_nbr(c, 1);
+			*printed += len(c);
 		}
 		else
 		{
@@ -102,15 +72,19 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 			{
 				ft_putchar_fd(' ', 1);
 				params->width--;
+				*printed += 1;
 			}
 			if (minus)
 				ft_putchar_fd('-', 1);
+			*printed += minus;
 			while (params->precision - len(c) > 0)
 			{
 				ft_putchar_fd('0', 1);
 				params->precision--;
+				*printed += 1;
 			}
 			print_nbr(c, 1);
+			*printed += len(c);
 		}
 	}
 }

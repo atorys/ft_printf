@@ -1,5 +1,4 @@
 #include "ft_printf.h"
-#include "libft/libft.h"
 
 void p_char(va_list arguments, t_fmt *params, int *printed)
 {
@@ -10,8 +9,9 @@ void p_char(va_list arguments, t_fmt *params, int *printed)
 		return ;
 	if (!params->width)
 	{
-		ft_putchar_fd(c, 1);
-		printed++;
+		write(1, &c, 1);
+		*printed += 1;
+		return ;
 	}
 	else if (params->width < 0)
 	{
@@ -21,23 +21,25 @@ void p_char(va_list arguments, t_fmt *params, int *printed)
 	}
 	if (params->minus)
 	{
-		ft_putchar_fd(c, 1);
+		write(1, &c, 1);
+		*printed += params->width;
 		while (--params->width > 0)
 			ft_putchar_fd(' ', 1);
 	}
 	else
 	{
+		*printed += params->width;
 		if (params->zero)
 		{
 			while (params->width-- > 1)
 				ft_putchar_fd('0', 1);
-			ft_putchar_fd(c, 1);
+			write(1, &c, 1);
 		}
 		else
 		{
 			while ( params->width-- > 1)
 				ft_putchar_fd(' ', 1);
-			ft_putchar_fd(c, 1);
+			write(1, &c, 1);
 		}
 	}
 }
