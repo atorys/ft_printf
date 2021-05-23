@@ -9,7 +9,7 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 	char	t;
 
 	t = params->type;
-	if (t == 'c')
+	if (t == 'c' || t == '%')
 		p_char(arguments, params, printed);
 //	else if (t == 's')
 //		;
@@ -17,10 +17,10 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 		p_int(arguments, params, printed);
 //	else if (t == 'p')
 //		;
-//	else if (t == 'u')
-//		;
+	else if (t == 'u')
+		p_unsigned(arguments, params, printed);
 //	else if (t == 'x')
-//		;
+//		p_hex(arguments, params, printed);
 //	else if (t == 'X')
 //		;
 //	else if (t == '%')

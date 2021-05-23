@@ -5,6 +5,18 @@ void	ft_putchar_fd(char c, int fd)
 	write(fd, &c, 1);
 }
 
+int ft_putchar_mod(char c, int fd, int mod)
+{
+	if (mod == 1)
+	{
+		write(fd, &c, 1);
+		return (1);
+	}
+	else if (!mod)
+		return (1);
+	return (0);
+}
+
 void	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
@@ -19,36 +31,29 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void	print_nbr(int n, int fd)
+void	print_nbr(long long n, int fd)
 {
-	if (n == -2147483648)
-		ft_putstr_fd("2147483648", fd);
-	else if (n == 2147483647)
-		ft_putstr_fd("2147483647", fd);
+	if (n < 0)
+		n = -1 * n;
+	if (n >= 0 && n < 10)
+		ft_putchar_fd(n + '0', fd);
 	else
 	{
-		if (n < 0)
-			n = -1 * n;
-		if (n >= 0 && n < 10)
-			ft_putchar_fd(n + '0', fd);
-		else
-		{
-			print_nbr(n / 10, fd);
-			print_nbr(n % 10, fd);
-		}
+		print_nbr(n / 10, fd);
+		print_nbr(n % 10, fd);
 	}
 }
 
-int	len(int c)
+int	len(long long c)
 {
 	int	len;
 
 	len = 0;
-	if (c < 0 && c > -2147483648)
+	if (c < 0)
 		c *= -1;
-	if (c == -2147483648 || c == 2147483647)
-		len = 10;
-	while (c > 0 && c != 2147483647)
+	if (c == 0)
+		len = 1;
+	while (c > 0)
 	{
 		c /= 10;
 		len++;

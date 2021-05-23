@@ -25,10 +25,13 @@ int		ft_isdigit(int c);
 
 void	p_char(va_list arguments, t_fmt *params, int *printed);
 void	p_int(va_list arguments, t_fmt *params, int *printed);
+void	p_unsigned(va_list arguments, t_fmt *params, int *printed);
+void	p_hex(va_list arguments, t_fmt *params, int *printed);
 
 void	ft_putchar_fd(char c, int fd);
+int		ft_putchar_mod(char c, int fd, int mod);
 void	ft_putstr_fd(char *s, int fd);
-void	print_nbr(int n, int fd);
-int		len(int c);
+void	print_nbr(long long n, int fd);
+int		len(long long c);
 
 #endif

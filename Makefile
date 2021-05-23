@@ -5,6 +5,7 @@ FILES =     ft_printf.c \
 			parsing_utils.c		printing_utils.c\
 			p_char.c \
 			p_int.c \
+			p_unsigned.c \
 
 O_FILES =	$(FILES:.c=.o)
 
@@ -13,9 +14,7 @@ CFLAGS =	-Wall -Wextra -Werror -g -O2
 all:		$(NAME)
 
 $(NAME):	$(O_FILES) $(HEADERS)
-			$(MAKE) -C ./libft
-			cp ./libft/libft.a .
-			ar rcs $(NAME) libft.a $?
+			ar rcs $(NAME) $?
 
 %.o :		%.c
 			gcc $(CFLAGS) -c $< -o $@
@@ -28,4 +27,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY: 	all	clean fclean re
+.PHONY =	all	clean fclean re
