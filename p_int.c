@@ -17,7 +17,7 @@ void p_int(va_list arguments, t_fmt *params, int *printed)
 	{
 		params->minus = 1;
 		params->zero = 0;
-		params->width = -1 * params->width;
+		params->width *= -1;
 	}
 	if (params->precision < 0)
 		params->precision = 0;
