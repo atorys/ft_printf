@@ -22,7 +22,7 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 //	else if (t == 'x')
 //		p_hex(arguments, params, printed);
 //	else if (t == 'X')
-//		;
+//		p_upper_hex(arguments, params, printed);
 //	else if (t == '%')
 //		;
 }

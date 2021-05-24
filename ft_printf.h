@@ -27,6 +27,7 @@ void	p_char(va_list arguments, t_fmt *params, int *printed);
 void	p_int(va_list arguments, t_fmt *params, int *printed);
 void	p_unsigned(va_list arguments, t_fmt *params, int *printed);
 void	p_hex(va_list arguments, t_fmt *params, int *printed);
+void	p_upper_hex(va_list arguments, t_fmt *params, int *printed);
 
 void	ft_putchar_fd(char c, int fd);
 int		ft_putchar_mod(char c, int fd, int mod);

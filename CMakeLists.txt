@@ -13,4 +13,6 @@ add_executable(printf
         p_int.c
         parsing_utils.c
         printing_utils.c
-        p_unsigned.c p_hex.c)
+        p_unsigned.c
+        p_hex.c
+        p_upper_hex.c)
