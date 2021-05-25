@@ -11,6 +11,7 @@ typedef struct s_flags_modifications_type
 	int		width;
 	int		precision;
 	char	type;
+	int 	sharp;
 }				t_fmt;
 
 int		ft_printf(const char *format, ...);

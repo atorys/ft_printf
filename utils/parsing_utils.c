@@ -7,6 +7,7 @@ void	new_params(t_fmt *params)
 	params->width = 0;
 	params->precision = -10;
 	params->type = 0;
+	params->sharp = 0;
 }
 
 int	is_type(char format)

@@ -19,8 +19,8 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 		p_hex(arguments, params, printed);
 	else if (t == 'X')
 		p_upper_hex(arguments, params, printed);
-	else if (t == 'n')
-		p_printed(arguments, params, printed);
+//	else if (t == 'n')
+//		p_printed(arguments, params, printed);
 }
 
 static int	find_flags(t_fmt *params, char *format)
@@ -28,15 +28,18 @@ static int	find_flags(t_fmt *params, char *format)
 	int	i;
 
 	i = 0;
-	while (format[i] && (format[i] == '0' || format[i] == '-'))
+	while (format[i] && (format[i] == '0' || format[i] == '-' || \
+	format[i] == '+' || format[i] == ' ' || format[i] == '#')) /** todo: do */
 	{
 		if (format[i] == '-')
 		{
 			params->minus = 1;
 			params->zero = 0;
 		}
-		if (format[i] == '0' && !params->width && !params->minus)
+		else if (format[i] == '0' && !params->width && !params->minus)
 			params->zero = 1;
+		else if (format[i] == '#')
+			params->sharp = 2;
 		i++;
 	}
 	return (i);
@@ -47,19 +50,19 @@ static int	find_mods(t_fmt *params, char *format, va_list arguments)
 	int	i;
 
 	i = 0;
-	while (ft_isdigit(format[i]))
-		params->width = params->width * 10 + (format[i++] - 48);
-	if (format[i] == '*' && !params->width)
+	if (ft_isdigit(format[i]))
 	{
-		params->width = va_arg(arguments, int);
-		i++;
+		params->width = 0;
+		while (ft_isdigit(format[i]))
+			params->width = params->width * 10 + (format[i++] - 48);
 	}
+	while (format[i] == '*' && ++i)
+		params->width = va_arg(arguments, int);
 	if (format[i] == '.')
 	{
 		params->precision = 0;
-		i++;
-		while (ft_isdigit(format[i])) /** todo: проверка не пролетает ли значение с .* */
-			params->precision = params->precision * 10 + (format[i++] - 48);
+		while (ft_isdigit(format[++i]))
+			params->precision = params->precision * 10 + (format[i] - 48);
 		if (format[i] == '*' && !params->precision)
 		{
 			params->precision = va_arg(arguments, int);
@@ -77,21 +80,20 @@ static void	str_parsing(char *format, va_list arguments, int *printed)
 	{
 		if (*format == '%')
 		{
-			format++;
 			new_params(&params);
-			format += find_flags(&params, format);
-			format += find_mods(&params, format, arguments);
-			if (!is_type(*format))
+			format++;
+			while (*format && !is_type(*format))
 			{
-				*printed = -1;
-				return ;
+				format += find_flags(&params, format);
+				format += find_mods(&params, format, arguments);
 			}
+			if (!is_type(*format))
+				return ;
 			params.type = *format++;
 			print(arguments, &params, printed);
 			continue ;
 		}
-		*printed += print_char(*format, 1, 1);
-		format++;
+		*printed += print_char(*format++, 1, 1);
 	}
 }
 
