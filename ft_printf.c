@@ -1,7 +1,3 @@
-//
-// Created by Achiote Tory on 5/16/21.
-//
-
 #include "ft_printf.h"
 
 static void	print(va_list arguments, t_fmt *params, int *printed)
@@ -11,20 +7,20 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 	t = params->type;
 	if (t == 'c' || t == '%')
 		p_char(arguments, params, printed);
-//	else if (t == 's')
-//		;
+	else if (t == 's')
+		p_str(arguments, params, printed);
 	else if (t == 'd' || t == 'i')
 		p_int(arguments, params, printed);
-//	else if (t == 'p')
-//		;
+	else if (t == 'p')
+		p_pointer(arguments, params, printed);
 	else if (t == 'u')
 		p_unsigned(arguments, params, printed);
-//	else if (t == 'x')
-//		p_hex(arguments, params, printed);
-//	else if (t == 'X')
-//		p_upper_hex(arguments, params, printed);
-//	else if (t == '%')
-//		;
+	else if (t == 'x')
+		p_hex(arguments, params, printed);
+	else if (t == 'X')
+		p_upper_hex(arguments, params, printed);
+	else if (t == 'n')
+		p_printed(arguments, params, printed);
 }
 
 static int	find_flags(t_fmt *params, char *format)
@@ -61,8 +57,9 @@ static int	find_mods(t_fmt *params, char *format, va_list arguments)
 	if (format[i] == '.')
 	{
 		params->precision = 0;
-		while (ft_isdigit(format[++i])) /** todo: проверка не пролетает ли значение с .* */
-			params->precision = params->precision * 10 + (format[i] - 48);
+		i++;
+		while (ft_isdigit(format[i])) /** todo: проверка не пролетает ли значение с .* */
+			params->precision = params->precision * 10 + (format[i++] - 48);
 		if (format[i] == '*' && !params->precision)
 		{
 			params->precision = va_arg(arguments, int);
@@ -93,8 +90,7 @@ static void	str_parsing(char *format, va_list arguments, int *printed)
 			print(arguments, &params, printed);
 			continue ;
 		}
-		write(1, &(*format), 1);
-		*printed = *printed + 1;
+		*printed += print_char(*format, 1, 1);
 		format++;
 	}
 }

@@ -9,10 +9,12 @@ add_executable(printf
         main.c
         ft_printf.c
         ft_printf.h
-        p_char.c
-        p_int.c
-        parsing_utils.c
-        printing_utils.c
-        p_unsigned.c
-        p_hex.c
-        p_upper_hex.c)
+        output/p_char.c
+        output/p_int.c
+        utils/parsing_utils.c
+        utils/printing_utils.c
+        output/p_unsigned.c
+        output/p_hex.c
+        output/p_upper_hex.c
+        output/p_str.c
+        output/p_pointer.c output/p_printed.c)

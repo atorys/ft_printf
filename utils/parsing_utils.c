@@ -13,7 +13,7 @@ int	is_type(char format)
 {
 	if (format == 'd' || format == 'i' || format == 's' || format == 'c' || \
 		format == 'p' || format == 'u' || format == 'x' || format == 'X' || \
-		format == '%')
+		format == '%' || format == 'n')
 		return (1);
 	return (0);
 }

@@ -21,14 +21,12 @@ static void	params_parsing(long long c, t_fmt *params)
 static void	if_minus(long long c, int minus, t_fmt *params, int *printed)
 {
 	if (minus)
-		ft_putchar_fd('-', 1);
-	*printed += minus;
+		*printed += print_char('-', 1, 1);
 	while (params->precision - len(c) > 0)
 	{
-		ft_putchar_fd('0', 1);
 		params->precision--;
 		params->width--;
-		*printed += 1;
+		*printed += print_char('0', 1, 1);
 	}
 	if (!(c == 0 && params->precision == 0))
 	{
@@ -37,22 +35,19 @@ static void	if_minus(long long c, int minus, t_fmt *params, int *printed)
 	}
 	while (params->width - params->precision - minus > 0)
 	{
-		ft_putchar_fd(' ', 1);
 		params->width--;
-		*printed += 1;
+		*printed += print_char(' ', 1, 1);
 	}
 }
 
 static void	if_zero(long long c, int minus, t_fmt *params, int *printed)
 {
 	if (minus)
-		ft_putchar_fd('-', 1);
-	*printed += minus;
+		*printed += print_char('-', 1, 1);
 	while (params->width - len(c) - minus > 0)
 	{
-		ft_putchar_fd('0', 1);
 		params->width--;
-		*printed += 1;
+		*printed += print_char('0', 1, 1);
 	}
 	print_nbr(c, 1);
 	*printed += len(c);
@@ -64,18 +59,15 @@ static void	if_not_zero(long long c, int minus, t_fmt *params, int *printed)
 		params->width = params->precision;
 	while (params->width - params->precision - minus > 0)
 	{
-		ft_putchar_fd(' ', 1);
 		params->width--;
-		*printed += 1;
+		*printed += print_char(' ', 1, 1);
 	}
 	if (minus)
-		ft_putchar_fd('-', 1);
-	*printed += minus;
+		*printed += print_char('-', 1, 1);
 	while (params->precision - len(c) > 0)
 	{
-		ft_putchar_fd('0', 1);
 		params->precision--;
-		*printed += 1;
+		*printed += print_char('0', 1, 1);
 	}
 	if (!(c == 0 && params->precision == 0))
 	{
@@ -87,7 +79,7 @@ static void	if_not_zero(long long c, int minus, t_fmt *params, int *printed)
 void	p_int(va_list arguments, t_fmt *params, int *printed)
 {
 	long long	c;
-	int	minus;
+	int			minus;
 
 	c = (long long)va_arg(arguments, int);
 	minus = 0;

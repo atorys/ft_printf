@@ -1,11 +1,19 @@
 NAME =		libftprintf.a
 HEADERS =   ft_printf.h
 
-FILES =     ft_printf.c \
-			parsing_utils.c		printing_utils.c\
-			p_char.c \
+INCLUDES =	./
+
+VPATH =		output \
+			utils
+
+FILES =     ft_printf.c			parsing_utils.c\
+			p_char.c			printing_utils.c\
 			p_int.c \
 			p_unsigned.c \
+			p_hex.c \
+			p_upper_hex.c \
+			p_pointer.c \
+			p_str.c
 
 O_FILES =	$(FILES:.c=.o)
 
@@ -17,7 +25,9 @@ $(NAME):	$(O_FILES) $(HEADERS)
 			ar rcs $(NAME) $?
 
 %.o :		%.c
-			gcc $(CFLAGS) -c $< -o $@
+			gcc $(CFLAGS) -I $(INCLUDES) -c $< -o $@
+
+bonus:		all
 
 clean:
 			@rm -f $(O_FILES)
@@ -27,4 +37,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY =	all	clean fclean re
+.PHONY =	all	clean fclean re bonus

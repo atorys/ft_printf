@@ -4,23 +4,19 @@ static void	if_minus(char c, t_fmt *params)
 {
 	write(1, &c, 1);
 	while (--params->width > 0)
-		ft_putchar_fd(' ', 1);
+		print_char(' ', 1, -1);
 }
 
 static void	if_not_minus(char c, t_fmt *params)
 {
+	char	flag;
+
+	flag = ' ';
 	if (params->zero)
-	{
-		while (params->width-- > 1)
-			ft_putchar_fd('0', 1);
-		write(1, &c, 1);
-	}
-	else
-	{
-		while (params->width-- > 1)
-			ft_putchar_fd(' ', 1);
-		write(1, &c, 1);
-	}
+		flag = '0';
+	while (params->width-- > 1)
+		print_char(flag, 1, -1);
+	write(1, &c, 1);
 }
 
 void	p_char(va_list arguments, t_fmt *params, int *printed)
@@ -33,8 +29,7 @@ void	p_char(va_list arguments, t_fmt *params, int *printed)
 		c = va_arg(arguments, int);
 	if (!params->width)
 	{
-		write(1, &c, 1);
-		*printed += 1;
+		*printed += print_char(c, 1, 1);
 		return ;
 	}
 	else if (params->width < 0)
