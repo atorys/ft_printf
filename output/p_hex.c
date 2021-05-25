@@ -10,7 +10,7 @@ static void	params_parsing(unsigned int c, t_fmt *params, int hex_len)
 			params->precision = 0;
 		params->sharp = 0;
 	}
-	if (hex_len > params->precision && params->precision != 0)
+	if (hex_len > params->precision && !(c == 0 && params->precision == 0))
 		params->precision = hex_len;
 	if (params->width < 0)
 	{
