@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	p_printed(va_list arguments, t_fmt *params, int *printed)
+void	p_nvalues(va_list arguments, int *printed)
 {
 	int	*c;
 
