@@ -11,7 +11,9 @@ typedef struct s_flags_modifications_type
 	int		width;
 	int		precision;
 	char	type;
-	int 	sharp;
+	int		sharp;
+	int		plus;
+	int		space;
 }				t_fmt;
 
 int		ft_printf(const char *format, ...);
@@ -27,7 +29,7 @@ void	p_hex(va_list arguments, t_fmt *params, int *printed);
 void	p_upper_hex(va_list arguments, t_fmt *params, int *printed);
 void	p_str(va_list arguments, t_fmt *params, int *printed);
 void	p_pointer(va_list arguments, t_fmt *params, int *printed);
-void	p_printed(va_list arguments, t_fmt *params, int *printed);
+void	p_nvalues(va_list arguments, int *printed);
 
 int		print_char(char c, int fd, int mod);
 void	print_nbr(long long n, int fd);

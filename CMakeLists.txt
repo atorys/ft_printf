@@ -17,4 +17,5 @@ add_executable(printf
         output/p_hex.c
         output/p_upper_hex.c
         output/p_str.c
-        output/p_pointer.c output/p_printed.c)
+        output/p_pointer.c
+        output/p_nvalues_bonus.c)

@@ -19,8 +19,8 @@ static void	print(va_list arguments, t_fmt *params, int *printed)
 		p_hex(arguments, params, printed);
 	else if (t == 'X')
 		p_upper_hex(arguments, params, printed);
-//	else if (t == 'n')
-//		p_printed(arguments, params, printed);
+	else if (t == 'n')
+		p_nvalues(arguments, printed);
 }
 
 static int	find_flags(t_fmt *params, char *format)
@@ -29,17 +29,21 @@ static int	find_flags(t_fmt *params, char *format)
 
 	i = 0;
 	while (format[i] && (format[i] == '0' || format[i] == '-' || \
-	format[i] == '+' || format[i] == ' ' || format[i] == '#')) /** todo: do */
+	format[i] == '+' || format[i] == ' ' || format[i] == '#'))
 	{
 		if (format[i] == '-')
 		{
 			params->minus = 1;
 			params->zero = 0;
 		}
-		else if (format[i] == '0' && !params->width && !params->minus)
+		if (format[i] == '0' && !params->width && !params->minus)
 			params->zero = 1;
-		else if (format[i] == '#')
+		if (format[i] == '#')
 			params->sharp = 2;
+		if (format[i] == ' ')
+			params->space = 1;
+		if (format[i] == '+')
+			params->plus = 1;
 		i++;
 	}
 	return (i);
@@ -97,16 +101,14 @@ static void	str_parsing(char *format, va_list arguments, int *printed)
 	}
 }
 
-/******************************************************************************\
- * MAIN PART // @param format // @param ... // @return                         *
-\******************************************************************************/
-
 int	ft_printf(const char *format, ...)
 {
 	int		printed;
 	va_list	arguments;
 
 	printed = 0;
+	if (!format)
+		return (-1);
 	va_start(arguments, format);
 	str_parsing((char *)format, arguments, &printed);
 	va_end(arguments);
