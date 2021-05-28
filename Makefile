@@ -13,12 +13,10 @@ FILES =     ft_printf.c			parsing_utils.c\
 			p_hex.c \
 			p_upper_hex.c \
 			p_pointer.c \
-			p_str.c
-
-FILES_BONUS = p_nvalues_bonus.c
+			p_str.c \
+			p_nvalues.c
 
 O_FILES =		$(FILES:.c=.o)
-O_FILES_BONUS =	$(FILES_BONUS:.c=.o)
 
 CFLAGS =	-Wall -Wextra -Werror -g -O2
 
@@ -27,14 +25,13 @@ all:		$(NAME)
 $(NAME):	$(O_FILES) $(HEADERS)
 			ar rcs $(NAME) $?
 
-bonus:		$(O_FILES) $(O_FILES_BONUS) $(HEADERS)
-			ar rcs $(NAME) $?
+bonus:		all
 
 %.o :		%.c
 			gcc $(CFLAGS) -I $(INCLUDES) -c $< -o $@
 
 clean:
-			@rm -f $(O_FILES) $(O_FILES_BONUS)
+			@rm -f $(O_FILES)
 
 fclean:		clean
 			@rm -f $(NAME)
