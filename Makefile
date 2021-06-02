@@ -25,8 +25,6 @@ all:		$(NAME)
 $(NAME):	$(O_FILES) $(HEADERS)
 			ar rcs $(NAME) $?
 
-bonus:		all
-
 %.o :		%.c
 			gcc $(CFLAGS) -I $(INCLUDES) -c $< -o $@
 
@@ -38,4 +36,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY =	all	clean fclean re bonus
+.PHONY =	all	clean fclean re
